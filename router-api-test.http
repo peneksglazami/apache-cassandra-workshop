@@ -1,0 +1,46 @@
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "login": "login",
+  "password": "password1",
+  "groupId": "group1",
+  "status": "ACTIVE"
+}
+
+###
+GET http://localhost:8080/user/...
+###
+
+PUT http://localhost:8080/user/...
+Content-Type: application/json
+
+{
+  "login": "loginXXX",
+  "password": "passwordXXX",
+  "groupId": "groupXXX",
+  "status": "BLOCKED"
+}
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "login": "login",
+  "password": "password1"
+}
+
+###
+DELETE http://localhost:8080/user/...
+
+###
+
+PUT http://localhost:8080/user/update-group
+Content-Type: application/json
+
+{
+  "groupId": "group1",
+  "newStatus": "BLOCKED"
+}

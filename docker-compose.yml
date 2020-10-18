@@ -1,0 +1,71 @@
+version: '2.1'
+services:
+
+  datastax-apache-cassandra1:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=datastax-apache-cassandra1,datastax-apache-cassandra2,datastax-apache-cassandra3
+      - DC=dc1
+      - RACK=rack1
+      - OPSCENTER_IP=172.21.0.5
+    links:
+      - datastax-dse-opscenter:opscenter
+    ports:
+      - "9042:9042"
+    networks:
+      demo-network:
+        ipv4_address: 172.21.0.2
+
+  datastax-apache-cassandra2:
+    image: datastax/dse-server:6.8.4
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=datastax-apache-cassandra1,datastax-apache-cassandra2,datastax-apache-cassandra3
+      - DC=dc1
+      - RACK=rack2
+      - OPSCENTER_IP=172.21.0.5
+    links:
+      - datastax-dse-opscenter:opscenter
+    ports:
+      - "9043:9042"
+    networks:
+      demo-network:
+        ipv4_address: 172.21.0.3
+
+  datastax-apache-cassandra3:
+    image: datastax/dse-server:6.8.4
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=datastax-apache-cassandra1,datastax-apache-cassandra2,datastax-apache-cassandra3
+      - DC=dc1
+      - RACK=rack3
+      - OPSCENTER_IP=172.21.0.5
+    links:
+      - datastax-dse-opscenter:opscenter
+    ports:
+      - "9044:9042"
+    networks:
+      demo-network:
+        ipv4_address: 172.21.0.4
+
+  datastax-dse-opscenter:
+    container_name: datastax-dse-opscenter
+    image: datastax/dse-opscenter:6.8.4
+    environment:
+      - DS_LICENSE=accept
+    ports:
+      - "8888:8888"
+    networks:
+      demo-network:
+        ipv4_address: 172.21.0.5
+
+networks:
+  demo-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
