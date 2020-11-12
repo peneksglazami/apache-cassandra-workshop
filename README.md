@@ -8,8 +8,8 @@ DataStax Enterprise 6.8.4 Opscenter.
 тестовых данных из csv-файлов.
 Скрипты создания keyspace, csv-файлы и скрипт запуска Cassandra смотрите в каталоге `build.scripts/cassandra`.
 
-Для доступа к консоли Opscenter используйте ссылку http://localhost:8888 или (http://<адрес docker-machine>:8888, если
-запускаете контейнеры через docker-machine).
+Для доступа к консоли Opscenter используйте ссылку http://localhost:8888 или http://<адрес docker-machine>:8888, если
+запускаете контейнеры через docker-machine.
 При первом запуске необходимо выполнить следующие шаги:
 
 1. Выберите **Manage existing cluster**.
