@@ -78,11 +78,7 @@ public class CassandraStorageService {
                 uuid
         );
 
-        try {
-            cassandraOperations.batchOps().insert(userByLogin, userByUuid, userByGroupId).execute();
-        } catch (Exception ex) {
-            return null;
-        }
+        cassandraOperations.batchOps().insert(userByLogin, userByUuid, userByGroupId).execute();
 
         return uuid;
     }
@@ -91,15 +87,11 @@ public class CassandraStorageService {
         UserByUuid userByUuid = cassandraOperations.selectOneById(uuid, UserByUuid.class);
 
         if (userByUuid != null) {
-            try {
-                cassandraOperations.batchOps().delete(
-                        userByUuid,
-                        new UserByLogin(userByUuid.getLogin()),
-                        new UserByGroupId(userByUuid.getGroupId(), uuid)
-                ).execute();
-            } catch (Exception e) {
-                return false;
-            }
+            cassandraOperations.batchOps().delete(
+                    userByUuid,
+                    new UserByLogin(userByUuid.getLogin()),
+                    new UserByGroupId(userByUuid.getGroupId(), uuid)
+            ).execute();
 
             return true;
         }
@@ -131,19 +123,15 @@ public class CassandraStorageService {
             );
 
             CassandraBatchOperations cassandraBatchOperations = cassandraOperations.batchOps();
-            try {
-                cassandraBatchOperations.update(userByLogin, userByUuid);
-                cassandraBatchOperations.insert(userByGroupId);
-                if (!oldUserByUuid.getLogin().equals(request.getLogin())) {
-                    cassandraBatchOperations.delete(new UserByLogin(oldUserByUuid.getLogin()));
-                }
-                if (!oldUserByUuid.getGroupId().equals(request.getGroupId())) {
-                    cassandraBatchOperations.delete(new UserByGroupId(oldUserByUuid.getGroupId(), oldUserByUuid.getUuid()));
-                }
-                cassandraBatchOperations.execute();
-            } catch (Exception ex) {
-                return false;
+            cassandraBatchOperations.update(userByLogin, userByUuid);
+            cassandraBatchOperations.insert(userByGroupId);
+            if (!oldUserByUuid.getLogin().equals(request.getLogin())) {
+                cassandraBatchOperations.delete(new UserByLogin(oldUserByUuid.getLogin()));
             }
+            if (!oldUserByUuid.getGroupId().equals(request.getGroupId())) {
+                cassandraBatchOperations.delete(new UserByGroupId(oldUserByUuid.getGroupId(), oldUserByUuid.getUuid()));
+            }
+            cassandraBatchOperations.execute();
 
             return true;
         }
